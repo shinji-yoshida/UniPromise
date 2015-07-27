@@ -18,6 +18,9 @@ namespace UniPromise {
 		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
+			if(doneCallback == null)
+				throw new Exception("doneCallback is null");
+
 			if(resolved){
 				doneCallback(value);
 				return this;

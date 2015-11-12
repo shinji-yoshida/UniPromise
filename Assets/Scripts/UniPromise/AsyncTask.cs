@@ -17,6 +17,7 @@ namespace UniPromise {
 			if(started)
 				return result;
 
+			started = true;
 			func()
 				.Done(r => this.result.Resolve(r))
 					.Fail(e => this.result.Reject(e));

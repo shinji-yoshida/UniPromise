@@ -4,16 +4,28 @@ using System.Collections.Generic;
 
 namespace UniPromise {
 
-	public class Promises {
+	public static class Promises {
 		public static Promise<T[]> All<T>(params Promise<T>[] promises) {
 			return All(new List<Promise<T>>(promises));
 		}
 		
-		public static Promise<T[]> All<T>(IEnumerable<Promise<T>> promises) {
+		public static Promise<T[]> All<T>(this IEnumerable<Promise<T>> promises) {
 			return All(new List<Promise<T>>(promises));
 		}
 		
-		public static Promise<T[]> All<T>(List<Promise<T>> promises) {
+		public static Promise<T[]> All<T>(this List<Promise<T>> promises) {
+			return new AllPromiseFactory<T>().Create(promises);
+		}
+
+		public static Promise<T[]> AllDone<T>(params Promise<T>[] promises) {
+			return AllDone(new List<Promise<T>>(promises));
+		}
+		
+		public static Promise<T[]> AllDone<T>(this IEnumerable<Promise<T>> promises) {
+			return AllDone(new List<Promise<T>>(promises));
+		}
+		
+		public static Promise<T[]> AllDone<T>(this List<Promise<T>> promises) {
 			return new AllPromiseFactory<T>().Create(promises);
 		}
 		

@@ -29,5 +29,8 @@ namespace UniPromise {
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
 			return this;
 		}
+
+		public override void Dispose () {
+		}
 	}
 }

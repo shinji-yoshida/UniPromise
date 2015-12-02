@@ -7,7 +7,7 @@ namespace UniPromise {
 
 		public override State State {
 			get {
-				return State.Pending;
+				return State.Disposed;
 			}
 		}
 		
@@ -21,6 +21,9 @@ namespace UniPromise {
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
 			return new NeverPromise<U>();
+		}
+
+		public override void Dispose () {
 		}
 	}
 }

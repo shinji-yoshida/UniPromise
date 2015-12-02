@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 
 namespace UniPromise {
 	public class Deferred<T> : ActualPromise<T> {
@@ -11,7 +9,7 @@ namespace UniPromise {
 			this.value = val;
 			foreach(var each in doneCallbacks)
 				each(val);
-			doneCallbacks.Clear();
+			ClearCallbacks();
 		}
 		
 		public void Reject(Exception e) {
@@ -21,6 +19,18 @@ namespace UniPromise {
 			this.exception = e;
 			foreach(var each in failCallbacks)
 				each(e);
+			ClearCallbacks();
+		}
+
+		public override void Dispose () {
+			if(this.IsNotPending)
+				return;
+			state = State.Disposed;
+			ClearCallbacks();
+		}
+
+		void ClearCallbacks() {
+			doneCallbacks.Clear();
 			failCallbacks.Clear();
 		}
 	}

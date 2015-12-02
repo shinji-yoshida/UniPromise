@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 namespace UniPromise {
-	public class ActualPromise<T> : Promise<T> {
+	public abstract class ActualPromise<T> : Promise<T> {
 		protected LinkedList<Action<T>> doneCallbacks;
 		protected LinkedList<Action<Exception>> failCallbacks;
 		protected T value;

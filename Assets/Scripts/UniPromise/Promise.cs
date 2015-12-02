@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace UniPromise {
-	public abstract class Promise<T> {
+	public abstract class Promise<T> : IDisposable {
 		public abstract State State { get; }
 
 		public bool IsPending { get { return this.State == State.Pending; } }
@@ -50,5 +50,7 @@ namespace UniPromise {
 				.Fail(e => result.Reject(e));
 			return result;
 		}
+
+		public abstract void Dispose ();
 	}
 }

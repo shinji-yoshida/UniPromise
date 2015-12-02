@@ -43,6 +43,13 @@ namespace UniPromise {
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
+			if(this.IsResolved)
+				return done(value);
+			if(this.IsRejected)
+				return Promises.Rejected<U>(exception);
+			if(this.IsDisposed)
+				return Promises.Disposed<U>();
+
 			var deferred = new Deferred<U>();
 			Done(
 				t => done(t)

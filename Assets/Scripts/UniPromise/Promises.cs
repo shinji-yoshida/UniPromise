@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UniPromise.Internal;
+using System;
 
 namespace UniPromise {
 
@@ -18,6 +19,10 @@ namespace UniPromise {
 		
 		public static Promise<T> Resolved<T>(T val) {
 			return new ResolvedPromise<T>(val);
+		}
+		
+		public static Promise<T> Rejected<T>(Exception e) {
+			return new RejectedPromise<T>(e);
 		}
 		
 		public static Promise<T> Disposed<T>() {

@@ -1,8 +1,8 @@
 ﻿using System;
 
 namespace UniPromise {
-	public class NeverPromise<T> : Promise<T> {
-		public NeverPromise () {
+	public class DisposedPromise<T> : Promise<T> {
+		public DisposedPromise () {
 		}
 
 		public override State State {
@@ -20,7 +20,7 @@ namespace UniPromise {
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
-			return new NeverPromise<U>();
+			return new DisposedPromise<U>();
 		}
 
 		public override void Dispose () {

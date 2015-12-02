@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,8 +33,8 @@ namespace UniPromise {
 			return new ResolvedPromise<T>(val);
 		}
 		
-		public static Promise<T> Never<T>() {
-			return new NeverPromise<T>();
+		public static Promise<T> Disposed<T>() {
+			return new DisposedPromise<T>();
 		}
 	}
 

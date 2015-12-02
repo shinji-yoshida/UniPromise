@@ -32,6 +32,10 @@ namespace UniPromise {
 		public static Promise<T> Resolved<T>(T val) {
 			return new ResolvedPromise<T>(val);
 		}
+		
+		public static Promise<T> Never<T>() {
+			return new NeverPromise<T>();
+		}
 	}
 
 

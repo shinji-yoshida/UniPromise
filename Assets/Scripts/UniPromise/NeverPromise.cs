@@ -1,15 +1,11 @@
 ﻿using System;
 
 namespace UniPromise {
-	public class ResolvedPromise<T> : Promise<T> {
-		T val;
-		
-		public ResolvedPromise (T val) {
-			this.val = val;
+	public class NeverPromise<T> : Promise<T> {
+		public NeverPromise () {
 		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
-			doneCallback(val);
 			return this;
 		}
 		
@@ -18,7 +14,8 @@ namespace UniPromise {
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
-			return done(val);
+			return new NeverPromise<U>();
 		}
 	}
 }
+

@@ -4,6 +4,12 @@ namespace UniPromise {
 	public class NeverPromise<T> : Promise<T> {
 		public NeverPromise () {
 		}
+
+		public override State State {
+			get {
+				return State.Pending;
+			}
+		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
 			return this;

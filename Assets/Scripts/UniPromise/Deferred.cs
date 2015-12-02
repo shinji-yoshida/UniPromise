@@ -5,9 +5,9 @@ using System;
 namespace UniPromise {
 	public class Deferred<T> : ActualPromise<T> {
 		public void Resolve(T val) {
-			if(resolved || failed)
+			if(this.IsNotPending)
 				return;
-			resolved = true;
+			state = State.Resolved;
 			this.value = val;
 			foreach(var each in doneCallbacks)
 				each(val);
@@ -15,9 +15,9 @@ namespace UniPromise {
 		}
 		
 		public void Reject(Exception e) {
-			if(resolved || failed)
+			if(this.IsNotPending)
 				return;
-			failed = true;
+			state = State.Rejected;
 			this.exception = e;
 			foreach(var each in failCallbacks)
 				each(e);

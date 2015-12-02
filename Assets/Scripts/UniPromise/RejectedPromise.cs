@@ -10,6 +10,12 @@ namespace UniPromise {
 		public RejectedPromise (Exception e) {
 			this.e = e;
 		}
+
+		public override State State {
+			get {
+				return State.Rejected;
+			}
+		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
 			return this;

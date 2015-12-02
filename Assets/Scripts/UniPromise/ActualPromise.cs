@@ -7,45 +7,41 @@ namespace UniPromise {
 	public class ActualPromise<T> : Promise<T> {
 		protected LinkedList<Action<T>> doneCallbacks;
 		protected LinkedList<Action<Exception>> failCallbacks;
-		protected bool resolved = false;
-		protected bool failed = false;
 		protected T value;
 		protected Exception exception;
+		protected State state;
 		
 		public ActualPromise() {
 			doneCallbacks = new LinkedList<Action<T>>();
 			failCallbacks = new LinkedList<Action<Exception>>();
+			state = State.Pending;
+		}
+
+		public override State State {
+			get {
+				return state;
+			}
 		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
 			if(doneCallback == null)
 				throw new Exception("doneCallback is null");
 
-			if(resolved){
+			if(this.IsResolved)
 				doneCallback(value);
-				return this;
-			}
-			else if(failed){
-				return this;
-			}
-			else{
+			else if(this.IsPending)
 				doneCallbacks.AddLast(doneCallback);
-				return this;
-			}
+
+			return this;
 		}
 		
 		public override Promise<T> Fail (Action<Exception> failCallback) {
-			if(failed){
+			if(this.IsRejected)
 				failCallback(exception);
-				return this;
-			}
-			else if(resolved){
-				return this;
-			}
-			else{
+			else if(this.IsPending)
 				failCallbacks.AddLast(failCallback);
-				return this;
-			}
+
+			return this;
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {

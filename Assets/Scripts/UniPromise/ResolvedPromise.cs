@@ -7,6 +7,12 @@ namespace UniPromise {
 		public ResolvedPromise (T val) {
 			this.val = val;
 		}
+
+		public override State State {
+			get {
+				return State.Resolved;
+			}
+		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
 			doneCallback(val);

@@ -1,13 +1,15 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 
 namespace UniPromise {
 	public abstract class Promise<T> {
-		public static Promise<T> Resolved(T val) {
-			return new ResolvedPromise<T>(val);
-		}
-		
+		public abstract State State { get; }
+
+		public bool IsPending { get { return this.State == State.Pending; } }
+		public bool IsNotPending { get { return this.State != State.Pending; } }
+		public bool IsResolved { get { return this.State == State.Resolved; } }
+		public bool IsRejected { get { return this.State == State.Rejected; } }
+		public bool IsDisposed { get { return this.State == State.Disposed; } }
+
 		public abstract Promise<T> Done(Action<T> doneCallback);
 		
 		public abstract Promise<T> Fail(Action<Exception> failedCallback);

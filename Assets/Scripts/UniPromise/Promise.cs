@@ -54,6 +54,8 @@ namespace UniPromise {
 			return result;
 		}
 
+		public abstract Promise<T> Clone();
+
 		public abstract void Dispose ();
 	}
 }

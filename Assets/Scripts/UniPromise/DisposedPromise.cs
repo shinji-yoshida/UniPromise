@@ -28,6 +28,10 @@ namespace UniPromise {
 			return new DisposedPromise<U>();
 		}
 
+		public override Promise<T> Clone () {
+			return this;
+		}
+
 		public override void Dispose () {
 		}
 	}

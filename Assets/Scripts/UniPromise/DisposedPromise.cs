@@ -18,6 +18,11 @@ namespace UniPromise {
 		public override Promise<T> Fail (Action<Exception> failedCallback) {
 			return this;
 		}
+
+		public override Promise<T> Disposed (Action disposedCallback) {
+			disposedCallback();
+			return this;
+		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
 			return new DisposedPromise<U>();

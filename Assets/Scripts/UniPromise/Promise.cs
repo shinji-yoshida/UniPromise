@@ -14,6 +14,8 @@ namespace UniPromise {
 		
 		public abstract Promise<T> Fail(Action<Exception> failedCallback);
 
+		public abstract Promise<T> Disposed(Action disposedCallback);
+
 		public Promise<T> ThrowOnFail () {
 			return Fail(e => {throw e;});
 		}
@@ -33,7 +35,7 @@ namespace UniPromise {
 		
 		public Promise<U> Select<U>(Func<T, U> selector) {
 			var result = new Deferred<U>();
-			Done(t => result.Resolve(selector(t))).Fail(e => result.Reject(e));
+			Done(t => result.Resolve(selector(t))).Fail(e => result.Reject(e)).Disposed(() => result.Dispose());
 			return result;
 		}
 		
@@ -46,8 +48,9 @@ namespace UniPromise {
 				catch(Exception e) {
 					result.Reject(e);
 				}
-			})
-				.Fail(e => result.Reject(e));
+			});
+			Fail(e => result.Reject(e));
+			Disposed(() => result.Dispose());
 			return result;
 		}
 

@@ -7,8 +7,10 @@ namespace UniPromise {
 				return;
 			state = State.Resolved;
 			this.value = val;
-			foreach(var each in doneCallbacks)
-				each(val);
+			foreach(var each in callbacks) {
+				if(each.type == CallbackType.Done)
+					each.Done(val);
+			}
 			ClearCallbacks();
 		}
 		
@@ -17,8 +19,10 @@ namespace UniPromise {
 				return;
 			state = State.Rejected;
 			this.exception = e;
-			foreach(var each in failCallbacks)
-				each(e);
+			foreach(var each in callbacks) {
+				if(each.type == CallbackType.Fail)
+					each.Fail(e);
+			}
 			ClearCallbacks();
 		}
 
@@ -26,12 +30,16 @@ namespace UniPromise {
 			if(this.IsNotPending)
 				return;
 			state = State.Disposed;
+			foreach(var each in callbacks) {
+				if(each.type == CallbackType.Disposed)
+					each.Disposed();
+			}
 			ClearCallbacks();
 		}
 
 		void ClearCallbacks() {
-			doneCallbacks.Clear();
-			failCallbacks.Clear();
+			callbacks.Clear();
+			callbacks = null;
 		}
 	}
 }

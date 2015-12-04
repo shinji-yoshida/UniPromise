@@ -24,6 +24,10 @@ namespace UniPromise {
 			return this;
 		}
 		
+		public override Promise<T> Disposed (Action disposedCallback) {
+			return this;
+		}
+		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
 			return this;
 		}

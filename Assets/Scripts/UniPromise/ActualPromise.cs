@@ -70,16 +70,7 @@ namespace UniPromise {
 		}
 
 		public override Promise<T> Clone () {
-			if(this.IsResolved)
-				return Promises.Resolved(value);
-			if(this.IsRejected)
-				return Promises.Rejected<T>(exception);
-			if(this.IsDisposed)
-				return Promises.Disposed<T>();
-
-			var cloned = new Deferred<T>();
-			this.Done(t => cloned.Resolve(t)).Fail(e => cloned.Reject(e)).Disposed(() => cloned.Dispose());
-			return cloned;
+			return this.Then<T>(_ => this);
 		}
 
 

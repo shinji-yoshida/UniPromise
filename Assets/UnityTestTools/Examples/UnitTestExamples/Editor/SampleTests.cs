@@ -8,6 +8,7 @@ namespace UnityTest
 {
     [TestFixture]
     [Category("Sample Tests")]
+	[Ignore]
     internal class SampleTests
     {
         [Test]

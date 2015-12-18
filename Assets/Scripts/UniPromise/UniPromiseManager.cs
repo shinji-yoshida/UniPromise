@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using UniPromise.Internal;
 
 namespace UniPromise {
-	public class UniPromiseManager : MonoBehaviour {
-		protected static UniPromiseManager soleInstance;
-		List<Action> callbacks;
+	public class UniPromiseManager : MonoBehaviour, IUniPromiseManager {
+		internal static IUniPromiseManager soleInstance;
+		CallbackUpdater callbackUpdater;
 
-		public static UniPromiseManager Instance {
+		internal static IUniPromiseManager Instance {
 			get {
 				if(soleInstance != null)
 					return soleInstance;
@@ -16,6 +17,10 @@ namespace UniPromise {
 				soleInstance = go.GetComponent<UniPromiseManager>();
 				return soleInstance;
 			}
+		}
+
+		internal static void Reset(IUniPromiseManager newInstance) {
+			soleInstance = newInstance;
 		}
 
 		protected void Awake() {
@@ -31,21 +36,19 @@ namespace UniPromise {
 		}
 		
 		void Init () {
-			callbacks = new List<Action>();
+			callbackUpdater = new CallbackUpdater();
 		}
 
 		protected void Update() {
-			if(callbacks.Count == 0)
-				return;
-
-			for(int i = 0; i < callbacks.Count ; i++) { // callbacks.Count may be changed while looping
-				callbacks[i]();
-			}
-			callbacks.Clear();
+			callbackUpdater.Update();
 		}
 
-		internal void AddCallback(Action callback) {
-			callbacks.Add(callback);
+//		internal void AddCallback(Action callback) {
+//			callbackUpdater.AddCallback(callback);
+//		}
+
+		void IUniPromiseManager.AddCallback (Action callback) {
+			callbackUpdater.AddCallback(callback);
 		}
 	}
 }

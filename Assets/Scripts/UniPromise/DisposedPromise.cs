@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace UniPromise {
 	public class DisposedPromise<T> : Promise<T> {

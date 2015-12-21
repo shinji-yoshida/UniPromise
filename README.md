@@ -10,3 +10,4 @@ Fulfilled requirements
 Differences and Extensions
 ---
 - When onFulfilled or onRejected callback of Then() throws a exception, it is thrown normally instead of rejecting returned promise. If you want to reject returned promise on exception thrown, use ThenTryCatch() instead.
+- Promise of UniPromise implements IDisposable, and may transition to additional state Disposed from Pending state. You can use this feature for cancelling async operation. For example, you can avoid NullPointerException caused by accessing a field of the component which is destroyed before the promise resolved, by disposing the promise in the component's OnDestroy().

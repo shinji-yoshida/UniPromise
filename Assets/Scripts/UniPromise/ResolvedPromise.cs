@@ -15,7 +15,7 @@ namespace UniPromise {
 		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
-			UniPromiseManager.Instance.AddCallback(() => doneCallback(val));
+			doneCallback(val);
 			return this;
 		}
 		

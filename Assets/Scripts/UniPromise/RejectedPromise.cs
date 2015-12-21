@@ -20,7 +20,7 @@ namespace UniPromise {
 		}
 		
 		public override Promise<T> Fail (Action<Exception> failedCallback) {
-			UniPromiseManager.Instance.AddCallback(() => failedCallback(e));
+			failedCallback(e);
 			return this;
 		}
 		

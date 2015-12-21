@@ -24,7 +24,7 @@ namespace UniPromise {
 				throw new Exception("doneCallback is null");
 
 			if(this.IsResolved)
-				UniPromiseManager.Instance.AddCallback(() => doneCallback(value));
+				doneCallback(value);
 			else if(this.IsPending)
 				callbacks.Add(new Callback(CallbackType.Done, doneCallback));
 
@@ -33,7 +33,7 @@ namespace UniPromise {
 		
 		public override Promise<T> Fail (Action<Exception> failCallback) {
 			if(this.IsRejected)
-				UniPromiseManager.Instance.AddCallback (() => failCallback(exception));
+				failCallback(exception);
 			else if(this.IsPending)
 				callbacks.Add(new Callback(CallbackType.Fail, failCallback));
 
@@ -42,7 +42,7 @@ namespace UniPromise {
 
 		public override Promise<T> Disposed (Action disposedCallback) {
 			if(this.IsDisposed)
-				UniPromiseManager.Instance.AddCallback(() => disposedCallback());
+				disposedCallback();
 			else if(this.IsPending)
 				callbacks.Add(new Callback(CallbackType.Disposed, disposedCallback));
 
@@ -86,17 +86,15 @@ namespace UniPromise {
 			}
 
 			public void CallDone(T value) {
-				var action = (Action<T>)callback;
-				UniPromiseManager.Instance.AddCallback(() => action(value));
+				((Action<T>)callback)(value);
 			}
 			
 			public void CallFail(Exception e) {
-				var action = (Action<Exception>)callback;
-				UniPromiseManager.Instance.AddCallback(() => action(e));
+				((Action<Exception>)callback)(e);
 			}
 
 			public void CallDisposed() {
-				UniPromiseManager.Instance.AddCallback((Action)callback);
+				((Action)callback)();
 			}
 		}
 	}

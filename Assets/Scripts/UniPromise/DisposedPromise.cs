@@ -20,7 +20,7 @@ namespace UniPromise {
 		}
 
 		public override Promise<T> Disposed (Action disposedCallback) {
-			UniPromiseManager.Instance.AddCallback(disposedCallback);
+			disposedCallback();
 			return this;
 		}
 		

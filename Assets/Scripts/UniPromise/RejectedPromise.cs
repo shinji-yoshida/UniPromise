@@ -29,7 +29,7 @@ namespace UniPromise {
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
-			return this;
+			return new RejectedPromise<U>(e);
 		}
 		
 		public override Promise<T> Clone () {

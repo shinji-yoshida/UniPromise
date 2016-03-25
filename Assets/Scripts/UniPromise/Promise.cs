@@ -22,6 +22,8 @@ namespace UniPromise {
 		
 		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done);
 
+		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail);
+
 		public Promise<U> ThenWithCatch<U>(Func<T, Promise<U>> done) {
 			return Then(t => {
 				try{

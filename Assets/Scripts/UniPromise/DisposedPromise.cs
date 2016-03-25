@@ -28,6 +28,10 @@ namespace UniPromise {
 			return new DisposedPromise<U>();
 		}
 
+		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
+			return new DisposedPromise<U>();
+		}
+
 		public override Promise<T> Clone () {
 			return this;
 		}

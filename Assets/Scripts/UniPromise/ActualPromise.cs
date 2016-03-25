@@ -67,6 +67,26 @@ namespace UniPromise {
 			return deferred;
 		}
 
+		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
+			if(this.IsDisposed)
+				return Promises.Disposed<U>();
+
+			var deferred = new Deferred<U>();
+			Done(
+				t => done(t)
+				.Done(u => deferred.Resolve(u))
+				.Fail(e => deferred.Reject(e))
+				.Disposed(() => deferred.Dispose())
+			);
+			Fail (e => fail (e)
+				.Done (u => deferred.Resolve (u))
+				.Fail (e2 => deferred.Reject (e2))
+				.Disposed (() => deferred.Dispose ())
+			);
+			Disposed(() => deferred.Dispose());
+			return deferred;
+		}
+
 		public override Promise<T> Clone () {
 			return this.Then<T>(_ => this);
 		}

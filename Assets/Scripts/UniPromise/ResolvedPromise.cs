@@ -30,6 +30,10 @@ namespace UniPromise {
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
 			return done(val);
 		}
+
+		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
+			return done (val);
+		}
 		
 		public override Promise<T> Clone () {
 			return this;

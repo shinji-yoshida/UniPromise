@@ -34,7 +34,7 @@ namespace UniPromise.Internal {
 				if(resolvedCount == size)
 					deferred.Resolve(result);
 			})
-				.Fail(e => deferred.Reject(e));
+				.Fail(e => deferred.Reject(e)); // TODO dispose on fail
 		}
 	}
 }

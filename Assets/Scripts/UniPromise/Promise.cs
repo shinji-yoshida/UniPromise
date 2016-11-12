@@ -56,6 +56,19 @@ namespace UniPromise {
 			return result;
 		}
 
+		public Promise<T> Where(Predicate<T> condition) {
+			var result = new Deferred<T>();
+			Done(t => {
+				if(condition(t))
+					result.Resolve(t);
+				else
+					result.Dispose();
+			})
+				.Fail(result.Reject)
+				.Disposed(result.Dispose);
+			return result;
+		}
+
 		public abstract Promise<T> Clone();
 
 		public abstract void Dispose ();

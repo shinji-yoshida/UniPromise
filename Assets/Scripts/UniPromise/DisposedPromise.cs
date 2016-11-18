@@ -20,7 +20,12 @@ namespace UniPromise {
 		}
 
 		public override Promise<T> Disposed (Action disposedCallback) {
-			disposedCallback();
+			try {
+				disposedCallback();
+			}
+			catch(Exception e) {
+				Promises.ReportSinkException (e);
+			}
 			return this;
 		}
 		

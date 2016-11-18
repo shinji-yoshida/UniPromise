@@ -15,7 +15,12 @@ namespace UniPromise {
 		}
 		
 		public override Promise<T> Done (Action<T> doneCallback) {
-			doneCallback(val);
+			try {
+				doneCallback(val);
+			}
+			catch(Exception e) {
+				Promises.ReportSinkException (e);
+			}
 			return this;
 		}
 		
@@ -28,11 +33,21 @@ namespace UniPromise {
 		}
 		
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
-			return done(val);
+			try {
+				return done(val);
+			}
+			catch(Exception e) {
+				return Promises.Rejected<U> (e);
+			}
 		}
 
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
-			return done (val);
+			try {
+				return done(val);
+			}
+			catch(Exception e) {
+				return Promises.Rejected<U> (e);
+			}
 		}
 		
 		public override Promise<T> Clone () {

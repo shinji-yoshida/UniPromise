@@ -24,6 +24,7 @@ namespace UniPromise {
 
 		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail);
 
+		[Obsolete("This function is identical to Then().")]
 		public Promise<U> ThenWithCatch<U>(Func<T, Promise<U>> done) {
 			return Then(t => {
 				try{
@@ -36,11 +37,10 @@ namespace UniPromise {
 		}
 		
 		public Promise<U> Select<U>(Func<T, U> selector) {
-			var result = new Deferred<U>();
-			Done(t => result.Resolve(selector(t))).Fail(e => result.Reject(e)).Disposed(() => result.Dispose());
-			return result;
+			return Then (t => Promises.Resolved (selector (t)));
 		}
-		
+
+		[Obsolete("This function is identical to Select().")]
 		public Promise<U> SelectWithCatch<U>(Func<T, U> selector) {
 			var result = new Deferred<U>();
 			Done(t => {
@@ -57,16 +57,12 @@ namespace UniPromise {
 		}
 
 		public Promise<T> Where(Predicate<T> condition) {
-			var result = new Deferred<T>();
-			Done(t => {
+			return Then (t => {
 				if(condition(t))
-					result.Resolve(t);
+					return Promises.Resolved(t);
 				else
-					result.Dispose();
-			})
-				.Fail(result.Reject)
-				.Disposed(result.Dispose);
-			return result;
+					return Promises.Disposed<T>();
+			});
 		}
 
 		public abstract Promise<T> Clone();

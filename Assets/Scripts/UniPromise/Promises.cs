@@ -1,10 +1,29 @@
 using System.Collections.Generic;
 using UniPromise.Internal;
 using System;
+using UnityEngine;
 
 namespace UniPromise {
 
 	public static class Promises {
+		static Action<Exception> sinkExceptionHandler;
+
+		static Promises() {
+			ResetSinkExceptionHandler ();
+		}
+
+		public static void ResetSinkExceptionHandler () {
+			ResetSinkExceptionHandler (e => Debug.LogException (e));
+		}
+
+		public static void ResetSinkExceptionHandler (Action<Exception> handler) {
+			sinkExceptionHandler = handler;
+		}
+
+		internal static void ReportSinkException (Exception e) {
+			sinkExceptionHandler (e);
+		}
+
 		public static Promise<T[]> AllDone<T>(params Promise<T>[] promises) {
 			return AllDone(new List<Promise<T>>(promises));
 		}

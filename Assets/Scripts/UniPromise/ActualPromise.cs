@@ -23,28 +23,46 @@ namespace UniPromise {
 			if(doneCallback == null)
 				throw new Exception("doneCallback is null");
 
-			if(this.IsResolved)
-				doneCallback(value);
-			else if(this.IsPending)
-				callbacks.Add(new Callback(CallbackType.Done, doneCallback));
+			if (this.IsResolved) {
+				try {
+					doneCallback (value);
+				}
+				catch(Exception e) {
+					Promises.ReportSinkException (e);
+				}
+			} else if (this.IsPending) {
+				callbacks.Add (new Callback (CallbackType.Done, doneCallback));
+			}
 
 			return this;
 		}
 		
 		public override Promise<T> Fail (Action<Exception> failCallback) {
-			if(this.IsRejected)
-				failCallback(exception);
-			else if(this.IsPending)
-				callbacks.Add(new Callback(CallbackType.Fail, failCallback));
+			if (this.IsRejected) {
+				try {
+					failCallback (exception);
+				}
+				catch(Exception e) {
+					Promises.ReportSinkException (e);
+				}
+			} else if (this.IsPending) {
+				callbacks.Add (new Callback (CallbackType.Fail, failCallback));
+			}
 
 			return this;
 		}
 
 		public override Promise<T> Disposed (Action disposedCallback) {
-			if(this.IsDisposed)
-				disposedCallback();
-			else if(this.IsPending)
-				callbacks.Add(new Callback(CallbackType.Disposed, disposedCallback));
+			if (this.IsDisposed) {
+				try {
+					disposedCallback ();
+				}
+				catch(Exception e) {
+					Promises.ReportSinkException (e);
+				}
+			} else if (this.IsPending) {
+				callbacks.Add (new Callback (CallbackType.Disposed, disposedCallback));
+			}
 
 			return this;
 		}
@@ -56,12 +74,17 @@ namespace UniPromise {
 				return Promises.Disposed<U>();
 
 			var deferred = new Deferred<U>();
-			Done(
-				t => done(t)
+			Done(t => {
+				try {
+					done(t)
 						.Done(u => deferred.Resolve(u))
 						.Fail(e => deferred.Reject(e))
-						.Disposed(() => deferred.Dispose())
-				);
+						.Disposed(() => deferred.Dispose());
+				}
+				catch(Exception e) {
+					deferred.Reject(e);
+				}
+			});
 			Fail(e => deferred.Reject(e));
 			Disposed(() => deferred.Dispose());
 			return deferred;
@@ -72,17 +95,28 @@ namespace UniPromise {
 				return Promises.Disposed<U>();
 
 			var deferred = new Deferred<U>();
-			Done(
-				t => done(t)
-				.Done(u => deferred.Resolve(u))
-				.Fail(e => deferred.Reject(e))
-				.Disposed(() => deferred.Dispose())
-			);
-			Fail (e => fail (e)
-				.Done (u => deferred.Resolve (u))
-				.Fail (e2 => deferred.Reject (e2))
-				.Disposed (() => deferred.Dispose ())
-			);
+			Done(t => {
+				try {
+					done(t)
+						.Done(u => deferred.Resolve(u))
+						.Fail(e => deferred.Reject(e))
+						.Disposed(() => deferred.Dispose());
+				}
+				catch(Exception e) {
+					deferred.Reject(e);
+				}
+			});
+			Fail (e => {
+				try {
+					fail (e)
+						.Done (u => deferred.Resolve (u))
+						.Fail (e2 => deferred.Reject (e2))
+						.Disposed (() => deferred.Dispose ());
+				}
+				catch(Exception exceptionFromFail) {
+					deferred.Reject(exceptionFromFail);
+				}
+			});
 			Disposed(() => deferred.Dispose());
 			return deferred;
 		}
@@ -106,15 +140,30 @@ namespace UniPromise {
 			}
 
 			public void CallDone(T value) {
-				((Action<T>)callback)(value);
+				try {
+					((Action<T>)callback) (value);
+				}
+				catch(Exception e) {
+					Promises.ReportSinkException (e);
+				}
 			}
 			
 			public void CallFail(Exception e) {
-				((Action<Exception>)callback)(e);
+				try {
+					((Action<Exception>)callback)(e);
+				}
+				catch(Exception e2) {
+					Promises.ReportSinkException(e2);
+				}
 			}
 
 			public void CallDisposed() {
-				((Action)callback)();
+				try {
+					((Action)callback)();
+				}
+				catch(Exception e) {
+					Promises.ReportSinkException (e);
+				}
 			}
 		}
 	}

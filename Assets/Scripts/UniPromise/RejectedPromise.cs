@@ -20,7 +20,12 @@ namespace UniPromise {
 		}
 		
 		public override Promise<T> Fail (Action<Exception> failedCallback) {
-			failedCallback(e);
+			try {
+				failedCallback(e);
+			}
+			catch(Exception e) {
+				Promises.ReportSinkException (e);
+			}
 			return this;
 		}
 		
@@ -33,7 +38,12 @@ namespace UniPromise {
 		}
 
 		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
-			return fail(e);
+			try {
+				return fail(e);
+			}
+			catch(Exception e2) {
+				return Promises.Rejected<U> (e2);
+			}
 		}
 		
 		public override Promise<T> Clone () {

@@ -16,6 +16,14 @@ namespace UniPromise {
 
 		public abstract Promise<T> Disposed(Action disposedCallback);
 
+		public Promise<T> Finally(Action callback, bool includeDisposed=true) {
+			Done (_ => callback ());
+			Fail (_ => callback ());
+			if(includeDisposed)
+				Disposed (callback);
+			return this;
+		}
+
 		public Promise<T> ThrowOnFail () {
 			return Fail(e => {throw e;});
 		}

@@ -49,6 +49,17 @@ namespace UniPromise {
 				return Promises.Rejected<U> (e);
 			}
 		}
+
+		public override Promise<U> Then<U> (
+			Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail, Func<Promise<U>> disposed)
+		{
+			try {
+				return done(val);
+			}
+			catch(Exception e) {
+				return Promises.Rejected<U> (e);
+			}
+		}
 		
 		public override Promise<T> Clone () {
 			return this;

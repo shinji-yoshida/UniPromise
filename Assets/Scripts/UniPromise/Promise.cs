@@ -32,6 +32,9 @@ namespace UniPromise {
 
 		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail);
 
+		public abstract Promise<U> Then<U>(
+			Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail, Func<Promise<U>> disposed);
+
 		[Obsolete("This function is identical to Then().")]
 		public Promise<U> ThenWithCatch<U>(Func<T, Promise<U>> done) {
 			return Then(t => {

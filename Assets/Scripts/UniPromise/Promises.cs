@@ -68,5 +68,10 @@ namespace UniPromise {
 		public static Promise<T> Disposed<T>() {
 			return new DisposedPromise<T>();
 		}
+
+		public static Promise<T> PropagateThrough<T>(this Promise<T> src, Deferred<T> dst) {
+			dst.Propagate (src);
+			return src;
+		}
 	}
 }

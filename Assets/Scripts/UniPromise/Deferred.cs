@@ -26,6 +26,10 @@ namespace UniPromise {
 			ClearCallbacks();
 		}
 
+		public void Propagate(Promise<T> source) {
+			source.Done (Resolve).Fail (Reject).Disposed (Dispose);
+		}
+
 		public override void Dispose () {
 			if(this.IsNotPending)
 				return;

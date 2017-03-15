@@ -55,6 +55,15 @@ namespace UniPromise {
 		public static Promise<T> Rejected<T>(Exception e) {
 			return new RejectedPromise<T>(e);
 		}
+
+		public static Promise<T> RejectedWithThrow<T>(Exception e) {
+			try {
+				throw e;
+			}
+			catch(Exception thrown) {
+				return new RejectedPromise<T>(thrown);
+			}
+		}
 		
 		public static Promise<T> Disposed<T>() {
 			return new DisposedPromise<T>();

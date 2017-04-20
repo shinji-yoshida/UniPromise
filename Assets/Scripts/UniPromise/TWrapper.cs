@@ -14,4 +14,10 @@ namespace UniPromise {
 			return new TWrapper<T> (val);
 		}
 	}
+
+	public static class TWrapperExtensions {
+		public static TWrapper<T> Wrap<T>(this T t) where T : struct {
+			return new TWrapper<T> (t);
+		}
+	}
 }

@@ -25,7 +25,7 @@ namespace UniPromise {
 		}
 
 		public Promise<T> ThrowOnFail () {
-			return Fail(e => {new Exception("thrown by ThrowOnFail", e);});
+			return Fail(e => {throw new Exception("thrown by ThrowOnFail", e);});
 		}
 		
 		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done);

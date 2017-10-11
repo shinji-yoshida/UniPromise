@@ -1,7 +1,7 @@
 using System;
 
 namespace UniPromise {
-	public class DisposedPromise<T> : Promise<T> {
+	public class DisposedPromise<T> : AbstractPromise<T> {
 		public DisposedPromise () {
 		}
 

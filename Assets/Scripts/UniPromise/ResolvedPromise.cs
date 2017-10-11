@@ -1,7 +1,7 @@
 using System;
 
 namespace UniPromise {
-	public class ResolvedPromise<T> : Promise<T> {
+	public class ResolvedPromise<T> : AbstractPromise<T> {
 		T val;
 		
 		public ResolvedPromise (T val) {

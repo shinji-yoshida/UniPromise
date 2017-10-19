@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace UniPromise.Internal {
-	internal class AllPromiseFactory<T> {
+	internal class AllPromiseFactory<T> where T : class {
 		List<Promise<T>> promises;
 		int resolvedCount;
 		int size;

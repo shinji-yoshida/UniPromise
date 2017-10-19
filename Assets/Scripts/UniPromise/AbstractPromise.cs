@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 namespace UniPromise {
-	public abstract class AbstractPromise<T> : Promise<T> {
+	public abstract class AbstractPromise<T> : Promise<T> where T : class {
 		public abstract State State { get; }
 
 		public bool IsPending { get { return this.State == State.Pending; } }
@@ -31,15 +31,15 @@ namespace UniPromise {
 			return Fail(e => {throw new Exception("thrown by ThrowOnFail", e);});
 		}
 
-		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done);
+		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done) where U : class;
 
-		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail);
+		public abstract Promise<U> Then<U>(Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) where U : class;
 
 		public abstract Promise<U> Then<U>(
-			Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail, Func<Promise<U>> disposed);
+			Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail, Func<Promise<U>> disposed) where U : class;
 
 		[Obsolete("This function is identical to Then().")]
-		public Promise<U> ThenWithCatch<U>(Func<T, Promise<U>> done) {
+		public Promise<U> ThenWithCatch<U>(Func<T, Promise<U>> done) where U : class {
 			return Then(t => {
 				try{
 					return done(t);
@@ -50,12 +50,12 @@ namespace UniPromise {
 			});
 		}
 
-		public Promise<U> Select<U>(Func<T, U> selector) {
+		public Promise<U> Select<U>(Func<T, U> selector) where U : class {
 			return Then (t => Promises.Resolved (selector (t)));
 		}
 
 		[Obsolete("This function is identical to Select().")]
-		public Promise<U> SelectWithCatch<U>(Func<T, U> selector) {
+		public Promise<U> SelectWithCatch<U>(Func<T, U> selector) where U : class {
 			var result = new Deferred<U>();
 			Done(t => {
 				try {

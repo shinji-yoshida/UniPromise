@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace UniPromise {
-	public class Deferred<T> : ActualPromise<T> {
+	public class Deferred<T> : ActualPromise<T> where T : class {
 		public void Resolve(T val) {
 			if(this.IsNotPending)
 				return;

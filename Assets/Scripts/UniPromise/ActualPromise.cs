@@ -2,7 +2,7 @@
 using System;
 
 namespace UniPromise {
-	public abstract class ActualPromise<T> : AbstractPromise<T> {
+	public abstract class ActualPromise<T> : AbstractPromise<T> where T : class {
 		protected List<Callback> callbacks;
 		protected T value;
 		protected Exception exception;

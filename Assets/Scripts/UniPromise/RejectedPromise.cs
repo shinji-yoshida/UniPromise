@@ -2,7 +2,7 @@ using System;
 
 
 namespace UniPromise {
-	public class RejectedPromise<T> : AbstractPromise<T> {
+	public class RejectedPromise<T> : AbstractPromise<T> where T : class {
 		Exception e;
 		
 		public RejectedPromise (Exception e) {

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace UniPromise.Tests {
 	public class DisposedPromiseTest {
-		DisposedPromise<int> source;
-		DoneCallback<int> doneCallback;
+		DisposedPromise<TWrapper<int>> source;
+		DoneCallback<TWrapper<int>> doneCallback;
 		FailCallback failCallback;
 		List<Exception> exceptions;
 
 		[SetUp]
 		public void SetUp() {
-			source = new DisposedPromise<int> ();
-			doneCallback = new DoneCallback<int> ();
+			source = new DisposedPromise<TWrapper<int>> ();
+			doneCallback = new DoneCallback<TWrapper<int>> ();
 			failCallback = new FailCallback ();
 			exceptions = new List<Exception> ();
 		}

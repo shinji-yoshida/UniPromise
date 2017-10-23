@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 namespace UniPromise.Tests {
 	public class RejectedPromiseTest {
-		RejectedPromise<int> subject;
-		DoneCallback<int> doneCallback;
+		RejectedPromise<TWrapper<int>> subject;
+		DoneCallback<TWrapper<int>> doneCallback;
 		FailCallback failCallback;
 		List<Exception> exceptions;
 
 		[SetUp]
 		public void SetUp() {
-			subject = new RejectedPromise<int> (new Exception());
-			doneCallback = new DoneCallback<int> ();
+			subject = new RejectedPromise<TWrapper<int>> (new Exception());
+			doneCallback = new DoneCallback<TWrapper<int>> ();
 			failCallback = new FailCallback ();
 			exceptions = new List<Exception> ();
 		}
 
 		[Test]
 		public void ShouldRejectWhenFailInThenThrows() {
-			subject.Then<int> (
+			subject.Then<TWrapper<int>> (
 				_ => {
-					return Promises.Resolved(1);
+					return Promises.Resolved(1.Wrap());
 				},
 				_ => {
 					throw new Exception("expected");

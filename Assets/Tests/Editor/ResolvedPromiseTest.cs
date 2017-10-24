@@ -18,6 +18,13 @@ namespace UniPromise.Tests {
 		}
 
 		[Test]
+		public void SuccessCase() {
+			int actual = 0;
+			subject.Done(val => actual = val.val);
+			Assert.That (actual, Is.EqualTo (1));
+		}
+
+		[Test]
 		public void ShouldRejectWhenDoneInThenThrows() {
 			subject.Then<TWrapper<int>> (_ => {
 				throw new Exception ();

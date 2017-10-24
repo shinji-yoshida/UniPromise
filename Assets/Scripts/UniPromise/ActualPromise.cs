@@ -1,15 +1,21 @@
 ﻿using System.Collections.Generic;
 using System;
+using UniPromise.Internal;
 
 namespace UniPromise {
 	public abstract class ActualPromise<T> : AbstractPromise<T> where T : class {
-		protected List<Callback> callbacks;
+		protected List<Callback<T>> callbacks;
 		protected T value;
 		protected Exception exception;
 		protected State state;
+
+		protected ActualPromise (State state) {
+			this.state = state;
+		}
 		
-		public ActualPromise() {
-			callbacks = new List<Callback>();
+		
+		protected ActualPromise() {
+			callbacks = new List<Callback<T>>();
 			state = State.Pending;
 		}
 
@@ -24,14 +30,9 @@ namespace UniPromise {
 				throw new Exception("doneCallback is null");
 
 			if (this.IsResolved) {
-				try {
-					doneCallback (value);
-				}
-				catch(Exception e) {
-					Promises.ReportSinkException (e);
-				}
+				Internal.ThreadStaticDispatcher.Instance.DispatchDone (doneCallback, value);
 			} else if (this.IsPending) {
-				callbacks.Add (new Callback (CallbackType.Done, doneCallback));
+				callbacks.Add (new Callback<T> (CallbackType.Done, doneCallback));
 			}
 
 			return this;
@@ -39,14 +40,9 @@ namespace UniPromise {
 		
 		public override Promise<T> Fail (Action<Exception> failCallback) {
 			if (this.IsRejected) {
-				try {
-					failCallback (exception);
-				}
-				catch(Exception e) {
-					Promises.ReportSinkException (e);
-				}
+				ThreadStaticDispatcher.Instance.DispatchFail<T> (failCallback, exception);
 			} else if (this.IsPending) {
-				callbacks.Add (new Callback (CallbackType.Fail, failCallback));
+				callbacks.Add (new Callback<T> (CallbackType.Fail, failCallback));
 			}
 
 			return this;
@@ -54,14 +50,9 @@ namespace UniPromise {
 
 		public override Promise<T> Disposed (Action disposedCallback) {
 			if (this.IsDisposed) {
-				try {
-					disposedCallback ();
-				}
-				catch(Exception e) {
-					Promises.ReportSinkException (e);
-				}
+				ThreadStaticDispatcher.Instance.DispatchDisposed<T> (disposedCallback);
 			} else if (this.IsPending) {
-				callbacks.Add (new Callback (CallbackType.Disposed, disposedCallback));
+				callbacks.Add (new Callback<T> (CallbackType.Disposed, disposedCallback));
 			}
 
 			return this;
@@ -163,48 +154,6 @@ namespace UniPromise {
 
 		public override Promise<T> Clone () {
 			return this.Then<T>(_ => this);
-		}
-
-
-		protected enum CallbackType {
-			Done, Fail, Disposed
-		}
-
-		protected struct Callback {
-			public readonly CallbackType type;
-			object callback;
-
-			public Callback (CallbackType type, object callback) {
-				this.type = type;
-				this.callback = callback;
-			}
-
-			public void CallDone(T value) {
-				try {
-					((Action<T>)callback) (value);
-				}
-				catch(Exception e) {
-					Promises.ReportSinkException (e);
-				}
-			}
-			
-			public void CallFail(Exception e) {
-				try {
-					((Action<Exception>)callback)(e);
-				}
-				catch(Exception e2) {
-					Promises.ReportSinkException(e2);
-				}
-			}
-
-			public void CallDisposed() {
-				try {
-					((Action)callback)();
-				}
-				catch(Exception e) {
-					Promises.ReportSinkException (e);
-				}
-			}
 		}
 	}
 }

@@ -51,6 +51,10 @@ namespace UniPromise {
 		public static Promise<T> Resolved<T>(T val) where T : class {
 			return new ResolvedPromise<T>(val);
 		}
+
+		public static StructPromise<T> ResolvedStruct<T>(T val) where T : struct {
+			return new ResolvedStructPromise<T>(val.Wrap());
+		}
 		
 		public static Promise<T> Rejected<T>(Exception e) where T : class {
 			return new RejectedPromise<T>(e);

@@ -10,5 +10,13 @@ namespace UniPromise {
 				.Disposed (() => Debug.Log (string.Format ("{0} disposed", name)));
 			return promise;
 		}
+
+		public static StructPromise<T> Dump<T>(this StructPromise<T> promise, string name) where T : struct {
+			promise
+				.Done (i => Debug.Log (string.Format ("{0}-->{1}", name, i.val)))
+				.Fail (ex => Debug.Log (string.Format ("{0} failed-->{1}", name, ex)))
+				.Disposed (() => Debug.Log (string.Format ("{0} disposed", name)));
+			return promise;
+		}
 	}
 }

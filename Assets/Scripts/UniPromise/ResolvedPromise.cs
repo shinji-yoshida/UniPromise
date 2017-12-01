@@ -13,4 +13,10 @@ namespace UniPromise {
 		public override void Dispose () {
 		}
 	}
+
+	public class ResolvedStructPromise<T> : ResolvedPromise<TWrapper<T>>, StructPromise<T> where T : struct{
+		public ResolvedStructPromise (TWrapper<T> value) : base (value)
+		{
+		}
+	}
 }

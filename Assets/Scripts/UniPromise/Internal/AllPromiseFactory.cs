@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace UniPromise.Internal {
-	internal class AllPromiseFactory<T> {
+	internal class AllPromiseFactory<T> where T : class {
 		List<Promise<T>> promises;
 		int resolvedCount;
 		int size;
@@ -28,13 +28,14 @@ namespace UniPromise.Internal {
 		
 		void ObservePromise(int index){
 			var each = promises[index];
-			each.Done(t => {
-				result[index] = t;
+			each.Done (t => {
+				result [index] = t;
 				resolvedCount++;
-				if(resolvedCount == size)
-					deferred.Resolve(result);
+				if (resolvedCount == size)
+					deferred.Resolve (result);
 			})
-				.Fail(e => deferred.Reject(e)); // TODO dispose on fail
+				.Fail (deferred.Reject)
+				.Disposed (deferred.Dispose);
 		}
 	}
 }

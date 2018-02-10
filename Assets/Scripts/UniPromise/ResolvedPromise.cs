@@ -1,45 +1,22 @@
 using System;
 
 namespace UniPromise {
-	public class ResolvedPromise<T> : Promise<T> {
-		T val;
-		
-		public ResolvedPromise (T val) {
-			this.val = val;
+	public class ResolvedPromise<T> : ActualPromise<T> where T : class {
+		public ResolvedPromise (T value) : base (State.Resolved) {
+			this.value = value;
 		}
 
-		public override State State {
-			get {
-				return State.Resolved;
-			}
-		}
-		
-		public override Promise<T> Done (Action<T> doneCallback) {
-			doneCallback(val);
-			return this;
-		}
-		
-		public override Promise<T> Fail (Action<Exception> failedCallback) {
-			return this;
-		}
-		
-		public override Promise<T> Disposed (Action disposedCallback) {
-			return this;
-		}
-		
-		public override Promise<U> Then<U> (Func<T, Promise<U>> done) {
-			return done(val);
-		}
-
-		public override Promise<U> Then<U> (Func<T, Promise<U>> done, Func<Exception, Promise<U>> fail) {
-			return done (val);
-		}
-		
 		public override Promise<T> Clone () {
 			return this;
 		}
 
 		public override void Dispose () {
+		}
+	}
+
+	public class ResolvedStructPromise<T> : ResolvedPromise<TWrapper<T>>, StructPromise<T> where T : struct{
+		public ResolvedStructPromise (TWrapper<T> value) : base (value)
+		{
 		}
 	}
 }

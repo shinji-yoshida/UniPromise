@@ -37,9 +37,9 @@ class RecursionTest {
 
   Promise<CUnit> Recursion(int count) {
     if(count <= 0)
-      Promises.Resolved(CUnit.Default);
+      return Promises.Resolved(CUnit.Default);
 
-    Promises.Resolved(CUnit.Default)
+    return Promises.Resolved(CUnit.Default)
       .Then(_ => Recursion(count - 1));
   }
 }
@@ -132,7 +132,7 @@ class Sample : MonoBehaviour {
 
 ## UniRx Integration
 
-You can integrate Promise with UniRx by UniPromise.UniRxBridge.
+You can integrate Promise with [UniRx](https://github.com/neuecc/UniRx) by [UniPromise.UniRxBridge](https://github.com/shinji-yoshida/UniPromise.UniRxBridge).
 
 ```csharp
 using UnityEngine;

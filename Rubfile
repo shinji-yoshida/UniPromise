@@ -1,0 +1,10 @@
+config:
+  cache_root: vendor/rubstone
+  directories:
+    editor: Assets/Editor/ThirdParty
+libs:
+  - name: UniSpec
+    repository: git@github.com:shinji-yoshida/UniSpec.git
+    include_metafile: true
+    directories:
+      editor: src

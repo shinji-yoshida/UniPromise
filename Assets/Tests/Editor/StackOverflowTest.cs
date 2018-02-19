@@ -33,6 +33,10 @@ public class StackOverflowTest : SpecSuite {
 					"Enter_1", "Enter_0", "Exit_0", "Exit_1"
 				}));
 			});
+
+			It("Should not trigger stack overflow", () => {
+				Assert.That(() => SimpleRecursion(100000), Throws.Nothing);
+			});
 		});
 	}
 
@@ -48,5 +52,13 @@ public class StackOverflowTest : SpecSuite {
 		finally {
 			eventReporter ("Exit_" + recursionCount);
 		}
+	}
+
+	Promise<CUnit> SimpleRecursion(int recursionCount) {
+		if (recursionCount <= 0)
+			return Promises.Resolved (CUnit.Default);
+
+		return Promises.Resolved(CUnit.Default)
+			.Then (_ => SimpleRecursion (recursionCount - 1));
 	}
 }

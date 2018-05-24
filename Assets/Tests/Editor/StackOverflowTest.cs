@@ -10,11 +10,9 @@ public class StackOverflowTest : SpecSuite {
 	public void Test() {
 		Describe ("Promise Recursion Test", () => {
 			List<string> events = null;
-			Deferred<CUnit> trigger = null;
 
 			BeforeEach(() => {
 				events = new List<string>();
-				trigger = new Deferred<CUnit>();
 			});
 
 			It("Recursion should not increase callstack", () => {

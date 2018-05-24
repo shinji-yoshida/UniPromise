@@ -77,5 +77,17 @@ namespace UniPromise {
 			dst.Propagate (src);
 			return src;
 		}
+
+		public static Promise<T> Using<T, TResource>(
+			Func<TResource> resourceFactory, 
+			Func<TResource, Promise<T>> promiseFactory
+		)
+			where TResource : IDisposable
+			where T : class
+		{
+			var resource = resourceFactory ();
+			return promiseFactory (resource)
+				.Finally (resource.Dispose);
+		}
 	}
 }

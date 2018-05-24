@@ -10,7 +10,7 @@ namespace UniPromise {
 			this.val = val;
 		}
 
-		public static TWrapper<T> Create<T>(T val) {
+		public static TWrapper<T> Create(T val) {
 			return new TWrapper<T> (val);
 		}
 	}

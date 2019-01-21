@@ -23,6 +23,11 @@ namespace UniPromise.Internal {
 			for(int i = 0; i < size; i++){
 				ObservePromise(i);
 			};
+			deferred.Disposed(() =>
+				{
+					foreach(var each in promises)
+						each.Dispose();
+				});
 			return deferred;
 		}
 		

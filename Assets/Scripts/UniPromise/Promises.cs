@@ -45,7 +45,7 @@ namespace UniPromise {
 		}
 
 		public static Promise<T> AnyDone<T>(this List<Promise<T>> promises) where T : class {
-			return new AnyPromiseFactory<T> ().Create (promises);
+			return new AnyDonePromiseFactory<T> ().Create (promises);
 		}
 		
 		public static Promise<T> Resolved<T>(T val) where T : class {

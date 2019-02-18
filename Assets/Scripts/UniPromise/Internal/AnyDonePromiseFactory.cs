@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace UniPromise.Internal {
-	internal class AnyPromiseFactory<T> where T : class {
+	internal class AnyDonePromiseFactory<T> where T : class {
 		int nonResolvedCount;
 		int size;
 		Deferred<T> deferred;

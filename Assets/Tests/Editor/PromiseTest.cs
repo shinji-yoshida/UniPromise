@@ -146,6 +146,33 @@ namespace UniPromise.Tests {
 		}
 
 		[Test]
+		public void TestSuccessInThenWithAction() {
+			var callChecker = new DoneCallback<int> ();
+			var source = new Deferred<TWrapper<int>> ();
+			source.Resolve (1.Wrap());
+			source.Then (i => {
+				callChecker.Create()(i.val);
+			})
+				.Done (doneCallback.Create ()).Fail (failCallback.Create ());
+			Assert.That (callChecker.IsCalled, Is.True);
+			Assert.That (doneCallback.IsCalled, Is.True);
+			Assert.That (failCallback.IsCalled, Is.False);
+		}
+
+		[Test]
+		public void TestExceptionInThenWithAction ()
+		{
+			var source = new Deferred<TWrapper<int>> ();
+			source.Resolve (1.Wrap ());
+			source.Then (_ => {
+				throw new Exception ();
+			})
+				.Done (doneCallback.Create ()).Fail (failCallback.Create ());
+			Assert.That (doneCallback.IsCalled, Is.False);
+			Assert.That (failCallback.IsCalled, Is.True);
+		}
+
+		[Test]
 		public void TestSelect() {
 			var actual = 0;
 			Promises.Resolved (1.Wrap()).Select (_ => 2.Wrap()).Done (_ => actual++);

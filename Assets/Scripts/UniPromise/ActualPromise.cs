@@ -12,8 +12,8 @@ namespace UniPromise {
 		protected ActualPromise (State state) {
 			this.state = state;
 		}
-		
-		
+
+
 		protected ActualPromise() {
 			callbacks = new List<Callback<T>>();
 			state = State.Pending;
@@ -24,7 +24,7 @@ namespace UniPromise {
 				return state;
 			}
 		}
-		
+
 		public override Promise<T> Done (Action<T> doneCallback) {
 			if(doneCallback == null)
 				throw new Exception("doneCallback is null");
@@ -37,7 +37,7 @@ namespace UniPromise {
 
 			return this;
 		}
-		
+
 		public override Promise<T> Fail (Action<Exception> failCallback) {
 			if (this.IsRejected) {
 				ThreadStaticDispatcher.Instance.DispatchFail<T> (failCallback, exception);
@@ -149,6 +149,28 @@ namespace UniPromise {
 					deferred.Reject(e);
 				}
 			});
+			return deferred;
+		}
+
+		public override Promise<T> Then (Action<T> done)
+		{
+			if(this.IsRejected)
+				return Promises.Rejected<T>(exception);
+			if(this.IsDisposed)
+				return Promises.Disposed<T>();
+
+			var deferred = new Deferred<T>();
+			Done(t => {
+				try {
+					done(t);
+					deferred.Resolve (t);
+				}
+				catch(Exception e) {
+					deferred.Reject(e);
+				}
+			});
+			Fail(e => deferred.Reject(e));
+			Disposed(() => deferred.Dispose());
 			return deferred;
 		}
 

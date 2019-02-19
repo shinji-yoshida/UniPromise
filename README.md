@@ -94,6 +94,10 @@ class Sample : MonoBehaviour {
   public void ChainTest() {
     PromiseResolved()
       .Then(_ => {
+        // You can pass just an Action which does stuff sequentially
+        Debug.Log("Blur");
+      })
+      .Then(_ => {
           return PromiseRejected();
         })
       .Then(_ => {

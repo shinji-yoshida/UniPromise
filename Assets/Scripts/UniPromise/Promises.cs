@@ -47,6 +47,10 @@ namespace UniPromise {
 		public static Promise<T> AnyDone<T>(this List<Promise<T>> promises) where T : class {
 			return new AnyDonePromiseFactory<T> ().Create (promises);
 		}
+
+		public static Promise<T> Race<T>(this List<Promise<T>> promises, bool disposeMemberFinally) where T : class {
+			return RacePromiseExtensions.Race(promises, disposeMemberFinally);
+		}
 		
 		public static Promise<T> Resolved<T>(T val) where T : class {
 			return new ResolvedPromise<T>(val);

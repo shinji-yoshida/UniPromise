@@ -16,27 +16,32 @@ namespace UniPromise
 
 		public Promise<T> Done(System.Action<T> doneCallback)
 		{
-			return upstream.Done(doneCallback);
+			upstream.Done(doneCallback);
+			return this;
 		}
 
 		public Promise<T> Fail(System.Action<System.Exception> failedCallback)
 		{
-			return upstream.Fail(failedCallback);
+			upstream.Fail(failedCallback);
+			return this;
 		}
 
 		public Promise<T> Disposed(System.Action disposedCallback)
 		{
-			return upstream.Disposed(disposedCallback);
+			upstream.Disposed(disposedCallback);
+			return this;
 		}
 
 		public Promise<T> Finally(System.Action callback, bool includeDisposed = true)
 		{
-			return upstream.Finally(callback, includeDisposed);
+			upstream.Finally(callback, includeDisposed);
+			return this;
 		}
 
 		public Promise<T> ThrowOnFail()
 		{
-			return upstream.ThrowOnFail();
+			upstream.ThrowOnFail();
+			return this;
 		}
 
 		public Promise<U> Then<U>(System.Func<T, Promise<U>> done) where U : class

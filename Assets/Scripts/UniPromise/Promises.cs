@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UniPromise.Internal;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace UniPromise {
@@ -46,6 +47,11 @@ namespace UniPromise {
 
 		public static Promise<T> AnyDone<T>(this List<Promise<T>> promises) where T : class {
 			return new AnyDonePromiseFactory<T> ().Create (promises);
+		}
+
+		public static Promise<T> AnyFail<T>(params Promise<T>[] promises) where T : class
+		{
+			return new AnyErrorPromiseFactory<T>().Create(promises.ToList());
 		}
 
 		public static Promise<T> Race<T>(this List<Promise<T>> promises, bool disposeMemberFinally) where T : class {

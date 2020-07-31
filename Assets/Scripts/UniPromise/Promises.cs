@@ -37,6 +37,33 @@ namespace UniPromise {
 			return new AllPromiseFactory<T>().Create(promises);
 		}
 
+		///
+		/// Wait all promises being non-pending state.
+		/// When all promises being resolved, returned promise will be resolved.
+		/// 
+		public static Promise<CUnit> WaitAll<T>(params Promise<T>[] promises) where T : class
+		{
+			return WaitAll(new List<Promise<T>>(promises));
+		}
+
+		///
+		/// Wait all promises being non-pending state.
+		/// When all promises being resolved, returned promise will be resolved.
+		/// 
+		public static Promise<CUnit> WaitAll<T>(this IEnumerable<Promise<T>> promises) where T : class
+		{
+			return WaitAll(new List<Promise<T>>(promises));
+		}
+
+		///
+		/// Wait all promises being non-pending state.
+		/// When all promises being resolved, returned promise will be resolved.
+		/// 
+		public static Promise<CUnit> WaitAll<T>(this List<Promise<T>> promises) where T : class
+		{
+			return new WaitAllPromiseFactory().Create(promises);
+		}
+
 		public static Promise<T> AnyDone<T>(params Promise<T>[] promises) where T : class {
 			return AnyDone(new List<Promise<T>>(promises));
 		}
